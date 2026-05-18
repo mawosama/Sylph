@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -65,7 +64,8 @@ class AppColors {
 
 class AppFonts {
   static TextStyle display({double size = 24, Color? color}) {
-    return GoogleFonts.boldonse(
+    return TextStyle(
+      fontFamily: 'Boldonse',
       fontSize: size,
       fontWeight: FontWeight.w400,
       color: color ?? AppColors.text,
@@ -74,7 +74,8 @@ class AppFonts {
   }
 
   static TextStyle body({double size = 16, FontWeight weight = FontWeight.w400, Color? color}) {
-    return GoogleFonts.dmSans(
+    return TextStyle(
+      fontFamily: 'DMSans',
       fontSize: size,
       fontWeight: weight,
       color: color ?? AppColors.text,
@@ -82,7 +83,8 @@ class AppFonts {
   }
 
   static TextStyle boldonse({double size = 24, Color? color}) {
-    return GoogleFonts.boldonse(
+    return TextStyle(
+      fontFamily: 'Boldonse',
       fontSize: size,
       fontWeight: FontWeight.w400,
       color: color ?? AppColors.text,
@@ -91,7 +93,8 @@ class AppFonts {
   }
 
   static TextStyle label({double size = 10, Color? color}) {
-    return GoogleFonts.dmSans(
+    return TextStyle(
+      fontFamily: 'DMSans',
       fontSize: size,
       fontWeight: FontWeight.w500,
       color: color ?? AppColors.muted,
@@ -161,7 +164,7 @@ class WeatherData {
       lat: (json['coord']?['lat'] ?? 0).toDouble(),
       lon: (json['coord']?['lon'] ?? 0).toDouble(),
       timezone: tz,
-      localTime: DateTime.fromMillisecondsSinceEpoch(localMs),
+      localTime: DateTime.fromMillisecondsSinceEpoch(localMs.toInt()),
     );
   }
 }
@@ -228,19 +231,19 @@ class StorageService {
   static const String _historyKey = 'sylph_history';
   static const String _prefsKey = 'sylph_prefs';
 
-  static Future<List<HistoryItem>> loadHistory() async {
+  static Future<List<<HistoryItem>> loadHistory() async {
     final prefs = await SharedPreferences.getInstance();
     final jsonStr = prefs.getString(_historyKey);
     if (jsonStr == null) return [];
     try {
-      final List<dynamic> decoded = jsonDecode(jsonStr);
+      final List<<dynamic> decoded = jsonDecode(jsonStr);
       return decoded.map((e) => HistoryItem.fromJson(e)).toList();
     } catch (_) {
       return [];
     }
   }
 
-  static Future<void> saveHistory(List<HistoryItem> history) async {
+  static Future<void> saveHistory(List<<HistoryItem> history) async {
     final prefs = await SharedPreferences.getInstance();
     final encoded = jsonEncode(history.map((e) => e.toJson()).toList());
     await prefs.setString(_historyKey, encoded);
@@ -275,7 +278,7 @@ class StorageService {
 //  API SERVICE
 // ═══════════════════════════════════════════════════════════
 class ApiService {
-  static Future<WeatherData> fetchWeather(String city) async {
+  static Future<<WeatherData> fetchWeather(String city) async {
     final url = Uri.parse(
       'https://api.openweathermap.org/data/2.5/weather?q=${Uri.encodeComponent(city)}&appid=$OWM_KEY&units=metric',
     );
@@ -286,7 +289,7 @@ class ApiService {
     return WeatherData.fromJson(jsonDecode(response.body));
   }
 
-  static Future<AQIData?> fetchAQI(String city) async {
+  static Future<<AQIData?> fetchAQI(String city) async {
     try {
       final url = Uri.parse(
         'https://api.waqi.info/feed/${Uri.encodeComponent(city)}/?token=$WAQI_KEY',
@@ -667,10 +670,10 @@ class AnimatedOrbs extends StatefulWidget {
   const AnimatedOrbs({super.key, required this.weatherCode, required this.temp});
 
   @override
-  State<AnimatedOrbs> createState() => _AnimatedOrbsState();
+  State<<AnimatedOrbs> createState() => _AnimatedOrbsState();
 }
 
-class _AnimatedOrbsState extends State<AnimatedOrbs>
+class _AnimatedOrbsState extends State<<AnimatedOrbs>
     with TickerProviderStateMixin {
   late AnimationController _ctrl1;
   late AnimationController _ctrl2;
@@ -695,7 +698,7 @@ class _AnimatedOrbsState extends State<AnimatedOrbs>
     super.dispose();
   }
 
-  List<Color> get _orbColors {
+  List<<Color> get _orbColors {
     final code = widget.weatherCode;
     final temp = widget.temp;
 
@@ -795,7 +798,7 @@ class SkyGradient extends StatelessWidget {
     );
   }
 
-  List<Color> _getColors() {
+  List<<Color> _getColors() {
     final utcMs = DateTime.now().millisecondsSinceEpoch + DateTime.now().timeZoneOffset.inMilliseconds;
     final local = DateTime.fromMillisecondsSinceEpoch(utcMs + timezone * 1000);
     final h = local.hour + local.minute / 60;
@@ -834,10 +837,10 @@ class WeatherHomePage extends StatefulWidget {
   const WeatherHomePage({super.key});
 
   @override
-  State<WeatherHomePage> createState() => _WeatherHomePageState();
+  State<<WeatherHomePage> createState() => _WeatherHomePageState();
 }
 
-class _WeatherHomePageState extends State<WeatherHomePage>
+class _WeatherHomePageState extends State<<WeatherHomePage>
     with TickerProviderStateMixin {
   final TextEditingController _cityController = TextEditingController();
   bool _isLoading = false;
@@ -846,7 +849,7 @@ class _WeatherHomePageState extends State<WeatherHomePage>
   AQIData? _aqi;
   String _currentUnit = 'C';
   Map<String, dynamic> _prefs = {};
-  List<HistoryItem> _history = [];
+  List<<HistoryItem> _history = [];
 
   @override
   void initState() {
@@ -2082,11 +2085,11 @@ class _WeatherHomePageState extends State<WeatherHomePage>
 // ═══════════════════════════════════════════════════════════
 class SettingsSheet extends StatefulWidget {
   final Map<String, dynamic> prefs;
-  final List<HistoryItem> history;
+  final List<<HistoryItem> history;
   final String currentUnit;
   final Function(String) onUnitChange;
   final Function(Map<String, dynamic>) onPrefsUpdate;
-  final Function(List<HistoryItem>) onHistoryUpdate;
+  final Function(List<<HistoryItem>) onHistoryUpdate;
   final Function(String) onLoadCity;
 
   const SettingsSheet({
@@ -2101,10 +2104,10 @@ class SettingsSheet extends StatefulWidget {
   });
 
   @override
-  State<SettingsSheet> createState() => _SettingsSheetState();
+  State<<SettingsSheet> createState() => _SettingsSheetState();
 }
 
-class _SettingsSheetState extends State<SettingsSheet> {
+class _SettingsSheetState extends State<<SettingsSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -2234,7 +2237,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
                         const SizedBox(width: 8),
                         GestureDetector(
                           onTap: () {
-                            final newHistory = List<HistoryItem>.from(widget.history);
+                            final newHistory = List<<HistoryItem>.from(widget.history);
                             newHistory.removeAt(e.key);
                             widget.onHistoryUpdate(newHistory);
                             setState(() {});
@@ -2324,7 +2327,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
     );
   }
 
-  Widget _buildSection(String title, List<Widget> children) {
+  Widget _buildSection(String title, List<<Widget> children) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -2521,10 +2524,10 @@ class OnboardingSheet extends StatefulWidget {
   });
 
   @override
-  State<OnboardingSheet> createState() => _OnboardingSheetState();
+  State<<OnboardingSheet> createState() => _OnboardingSheetState();
 }
 
-class _OnboardingSheetState extends State<OnboardingSheet> {
+class _OnboardingSheetState extends State<<OnboardingSheet> {
   final _nameController = TextEditingController();
   final _cityController = TextEditingController();
 
