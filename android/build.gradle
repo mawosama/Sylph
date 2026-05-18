@@ -1,0 +1,40 @@
+buildscript {
+    ext.kotlin_version = '1.9.24'
+}
+
+plugins {
+    id "com.android.application" version "8.2.0"
+    id "kotlin-android"
+    id "com.google.gms.google-services"
+}
+
+android {
+    compileSdkVersion 34
+
+    lintOptions {
+        disable 'MissingDimensionActivityClassName'
+    }
+
+    defaultConfig {
+        applicationId "com.example.sylph"
+        minSdkVersion 21
+        targetSdkVersion 34
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.debug
+        }
+    }
+}
+
+flutter {
+    source = '../..'
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation 'com.google.firebase:firebase-analytics'
+}
