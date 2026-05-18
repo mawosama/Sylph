@@ -24,6 +24,19 @@ jobs:
           flutter-version: '3.24.0'
           channel: 'stable'
 
+      - name: Create Flutter project
+        run: |
+          flutter create --project-name sylph temp_project
+          cp -r temp_project/android .
+          cp -r temp_project/ios .
+          cp -r temp_project/linux .
+          cp -r temp_project/macos .
+          cp -r temp_project/windows .
+          cp -r temp_project/web .
+          cp temp_project/.metadata .
+          cp temp_project/analysis_options.yaml .
+          rm -rf temp_project
+
       - name: Get dependencies
         run: flutter pub get
 
