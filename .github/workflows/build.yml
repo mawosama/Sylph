@@ -37,6 +37,11 @@ jobs:
           cp temp_project/analysis_options.yaml .
           rm -rf temp_project
 
+      - name: Fix Kotlin version
+        run: |
+          sed -i 's/ext.kotlin_version = .*/ext.kotlin_version = "1.9.22"/' android/build.gradle
+          sed -i 's/id "org.jetbrains.kotlin.android" version .*/id "org.jetbrains.kotlin.android" version "1.9.22"/' android/settings.gradle
+
       - name: Get dependencies
         run: flutter pub get
 
