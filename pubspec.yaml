@@ -13,14 +13,25 @@ dependencies:
   http: ^1.1.0
   shared_preferences: ^2.2.2
   google_fonts: ^6.2.0
+  connectivity_plus: ^4.0.0
+
+dev_dependencies:
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
 
   assets:
-    - assets/fonts/
+    - assets/icon/
 
   fonts:
     - family: Boldonse
       fonts:
         - asset: assets/fonts/Boldonse-Regular.ttf
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/icon/sylph.png"
+  adaptive_icon_background: "#0a0a0f"
+  adaptive_icon_foreground: "assets/icon/sylph_foreground.png"
