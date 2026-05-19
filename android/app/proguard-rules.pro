@@ -1,18 +1,44 @@
-# Flutter proguard rules
+# Flutter wrapper
+-keep class io.flutter.app.** { *; }
+-keep class io.flutter.plugin.** { *; }
+-keep class io.flutter.util.** { *; }
+-keep class io.flutter.view.** { *; }
 -keep class io.flutter.** { *; }
--keep class com.example.sylph.** { *; }
+-keep class io.flutter.plugins.** { *; }
 
-# HTTP and network libraries
+# Kotlin
+-keep class kotlin.** { *; }
+-keep class kotlin.Metadata { *; }
+-dontwarn kotlin.**
+-keepclassmembers class **$WhenMappings {
+    <fields>;
+}
+
+# HTTP
 -keep class okhttp3.** { *; }
 -keep interface okhttp3.** { *; }
--keep class com.squareup.okhttp3.** { *; }
 -dontwarn okhttp3.**
 -dontwarn okio.**
 
-# JSON parsing (if used)
--keep class com.google.gson.** { *; }
--dontwarn com.google.gson.**
+# Shared Preferences
+-keep class androidx.security.crypto.** { *; }
 
-# Keep main activity
--keep public class * extends android.app.Activity
--keep public class * extends android.app.Service
+# Google Fonts
+-keep class com.google.fonts.** { *; }
+
+# WAQI & OpenWeatherMap
+-keep class * extends java.lang.Exception { *; }
+
+# Keep native methods
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+# Keep enum
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+# Keep custom classes
+-keep class com.example.sylph.** { *; }
