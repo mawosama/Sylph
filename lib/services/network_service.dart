@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:async';
+import 'dart:async' show TimeoutException;
 
 Future<Map<String, dynamic>> fetchWeather(String city, String owmKey) async {
   final url = Uri.parse(
